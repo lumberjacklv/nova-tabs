@@ -1,5 +1,5 @@
 <?php
-namespace Eminiarts\Tabs;
+namespace Lumberjacklv\Tabs;
 
 use Laravel\Nova\Http\Requests\NovaRequest;
 

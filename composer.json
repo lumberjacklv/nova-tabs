@@ -1,5 +1,5 @@
 {
-    "name": "eminiarts/nova-tabs",
+    "name": "lumberjacklv/nova-tabs",
     "description": "Laravel Nova - Tabs.",
     "keywords": [
         "laravel",
@@ -19,13 +19,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Eminiarts\\Tabs\\": "src/"
+            "Lumberjacklv\\Tabs\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Eminiarts\\Tabs\\TabsServiceProvider"
+                "Lumberjacklv\\Tabs\\TabsServiceProvider"
             ]
         }
     },

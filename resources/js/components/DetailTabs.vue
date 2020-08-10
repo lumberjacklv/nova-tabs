@@ -1,9 +1,11 @@
 <template>
   <div>
     <slot>
-      <!--<h4 class="text-90 font-normal text-2xl mb-3">{{ panel.name }}</h4>-->
+      <div v-if="!panel.showHeading && !panel.defaultSearch && !panel.withToolbar" class="blank-space">&nbsp;</div>
+      <h4 v-if="panel && panel.showHeading" class="text-90 font-normal text-2xl mb-3">{{ panel.name }}</h4>
     </slot>
-    <div class="relationship-tabs-panel card">
+    <div class="relationship-tabs-panel card" 
+      :data-show-heading="panel.showHeading" :data-default-search="panel.defaultSearch" :data-with-toolbar="panel.withToolbar">
       <div class="tabs-wrap border-b-2 border-40 w-full">
         <div class="tabs flex flex-row overflow-x-auto">
           <button
@@ -16,7 +18,7 @@
         </div>
       </div>
       <div
-        :class="[(panel && panel.defaultSearch) ? 'default-search': 'tab-content', slugify(tab.name)]"
+        :class="[...tabClass, slugify(tab.name)]"
         :ref="slugify(tab.name)"
         v-for="(tab, index) in tabs"
         v-show="tab.name == activeTab"
@@ -52,6 +54,13 @@ export default {
     };
   },
   computed: {
+    tabClass() {
+      let classes = [];
+      (this.panel && this.panel.defaultSearch) ? classes.push('default-search'): classes.push('tab-content')
+      if (!this.panel) classes.push('loading')
+      if (this.panel && this.panel.withToolbar) classes.push('with-toolbar')
+      return classes;
+    },
     activeTabSearchWidth() {
       if (this.activeTabHasSearch) {
         let element = this.$el.querySelector(
@@ -145,7 +154,12 @@ export default {
 
 
 <style lang="scss">
+.blank-space {
+  line-height: 27px;
+  margin-bottom: 12px;
+}
 .relationship-tabs-panel {
+  
   .has-search-bar {
   }
   .tabs::-webkit-scrollbar {
@@ -182,11 +196,10 @@ export default {
   .tab-content > div > .relative > .flex {
     justify-content: flex-end;
     padding-left: 0.75rem;
-    padding-right: 0.75rem;
     position: absolute;
     top: 0;
     right: 0;
-    transform: translateY(-100%);
+    transform: translateY(-200%);
     align-items: center;
     height: 62px;
     z-index: 1;
@@ -199,6 +212,14 @@ export default {
       width: auto;
       margin-left: 1.5rem;
     }
+  }
+  .tab-content.with-toolbar > div > .relative > .flex {
+    transform: translateY(-100%);
+    padding-right: 0.75rem;
+  }
+  .loading.tab-content > div > .relative > .flex,
+  .loading.default-search > div > .relative > .flex {
+    display: none;
   }
 }
 </style>

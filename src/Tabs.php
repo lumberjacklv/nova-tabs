@@ -1,5 +1,5 @@
 <?php
-namespace Eminiarts\Tabs;
+namespace Lumberjacklv\Tabs;
 
 use RuntimeException;
 use Laravel\Nova\Panel;
@@ -12,6 +12,18 @@ class Tabs extends Panel
      * @var mixed
      */
     public $defaultSearch = false;
+
+
+    /**
+     * @var mixed
+     */
+    public $showHeader = false;
+
+
+    /**
+     * @var boolean
+     */
+    public $withToolbar = false;
 
     /**
      * Add fields to the Tab.
@@ -48,9 +60,9 @@ class Tabs extends Panel
         if ($panel instanceof ListableField) {
             $panel->panel = $this->name;
             $panel->withMeta([
-                'tab'         => $panel->name,
-                'listable'    => false,
-                'listableTab' => true,
+                'tab'          => $panel->name,
+                'listable'     => false,
+                'listableTab'  => true,
             ]);
             $this->data[] = $panel;
         } elseif ($panel instanceof Panel) {
@@ -60,6 +72,11 @@ class Tabs extends Panel
         }
 
         return $this;
+    }
+
+    public function withToolbar() {
+        $this->withToolbar = true;
+        return parent::withToolbar();
     }
 
     /**
@@ -73,6 +90,16 @@ class Tabs extends Panel
     }
 
     /**
+     * Show header without toolbar
+     */
+    public function showHeader($value = true)
+    {
+        $this->showHeader = $value;
+        
+        return $this;
+    }
+
+    /**
      * Prepare the panel for JSON serialization.
      *
      * @return array
@@ -82,6 +109,8 @@ class Tabs extends Panel
         return array_merge(parent::jsonSerialize(), [
             'component'     => 'detail-tabs',
             'defaultSearch' => $this->defaultSearch,
+            'showHeading'   => $this->showHeader && !$this->withToolbar,
+            'withToolbar'   => $this->withToolbar,
         ]);
     }
 
